@@ -58,7 +58,7 @@ public class RPCServer {
 	public RPCServer() throws IOException, TimeoutException {
 
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost("35.154.27.134");
+		factory.setHost("13.127.34.110");
 
 		connection = factory.newConnection();
 		channel = connection.createChannel();
@@ -67,7 +67,7 @@ public class RPCServer {
 		PoolProperties p = new PoolProperties();
 		Properties prop = new Properties();
 		InputStream input = null;
-		p.setUrl("jdbc:mysql://35.154.27.134/ci");
+		p.setUrl("jdbc:mysql://13.127.34.110/ci");
 		p.setDriverClassName("com.mysql.jdbc.Driver");
 		
 		//p.setDriverClassName("java.sql.DriverManager");

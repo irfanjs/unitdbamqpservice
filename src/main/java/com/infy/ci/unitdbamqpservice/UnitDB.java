@@ -33,7 +33,7 @@ public class UnitDB {
 		
 		this.projectid = projectid;
 		
-		p.setUrl("jdbc:mysql://35.154.27.134/ci");
+		p.setUrl("jdbc:mysql://13.127.34.110/ci");
 		p.setDriverClassName("com.mysql.jdbc.Driver");
 		
 		//p.setDriverClassName("java.sql.DriverManager");
@@ -177,7 +177,7 @@ public class UnitDB {
 	
 	public Connection getConnection() throws SQLException {
 		Connection connection = null;
-		return connection = DriverManager.getConnection("jdbc:mysql://35.154.27.134/ci","root", "root");
+		return connection = DriverManager.getConnection("jdbc:mysql://13.127.34.110/ci","root", "root");
 	}
 	
 	public static void close(Connection c, Statement s, ResultSet r) {
