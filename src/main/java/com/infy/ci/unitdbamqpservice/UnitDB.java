@@ -1,77 +1,87 @@
 package com.infy.ci.unitdbamqpservice;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 
-public class UnitDB {
-	
-	int projectid;
-	
-	static private UnitDB cihelper;
-	private DataSource dataSource;
-		
+public class UnitDB implements CIData {
+
+	UnitDBQueries ut;
+
+
 	public UnitDB(int projectid) {
-		PoolProperties p = new PoolProperties();
-		Properties prop = new Properties();
-		InputStream input = null;
-		
-		this.projectid = projectid;
-		
-		p.setUrl("jdbc:mysql://13.127.34.110/ci");
-		p.setDriverClassName("com.mysql.jdbc.Driver");
-		
-		//p.setDriverClassName("java.sql.DriverManager");
-		
-		p.setUsername("root");
-		p.setPassword("root");
-
-		p.setJmxEnabled(true);
-		p.setTestWhileIdle(true);
-		p.setTestOnBorrow(true);
-		p.setValidationQuery("SELECT 1");
-		p.setTestOnReturn(false);
-		p.setValidationInterval(30000);
-		p.setTimeBetweenEvictionRunsMillis(30000);
-		p.setMaxActive(100);
-		p.setInitialSize(10);
-		p.setMaxWait(10000);
-		p.setRemoveAbandonedTimeout(60);
-		p.setMinEvictableIdleTimeMillis(30000);
-		p.setMinIdle(10);
-		p.setLogAbandoned(true);
-		p.setRemoveAbandoned(true);
-		p.setJdbcInterceptors("org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"
-				+ "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
-		
-		prop.setProperty("useSSL", "false");
-		prop.setProperty("autoReconnect", "true");
-		
-
-		dataSource = new DataSource(p);
-	}
-
-	
-	public UnitDB() {
+		ut = new UnitDBQueries(projectid);
 		// TODO Auto-generated constructor stub
 	}
+	
+	@Override
+	public String getAggregatedDataForBuild(int buildno) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public String getAggregatedDataForLatestBuild() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public String getAllModuleDataForBuild(int buildno) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getModuleDataForLatestBuild() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getModuleDataForBuild(int buildno) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAllModuleDataForLatestNightlyBuild() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAllModuleDataForNightlyBuild(int buildno)
+			throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getModuleDataForLatestNightlyBuild() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getModuleDataForNightlyBuild(int buildno) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAllModuleDataForLatestBuild() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public String getLatestNightlyaggregate() throws IOException {
 		List<Map<String, Object>> data;
 		ChartData d = new ChartData();
@@ -89,7 +99,72 @@ public class UnitDB {
 		ArrayList<Integer> singleList = new ArrayList<Integer>();
 
 		try {
-			data = getAggregatedUnitTestDataForLatestNightlyBuild();
+			data = ut.getAggregatedUnitTestDataForLatestNightlyBuild();
+			if (data.size() != 0) {
+				for (Map<String, Object> data1 : data) {
+					for (Map.Entry<String, Object> entry : data1.entrySet()) {
+						System.out.println(entry.getKey() + ": "
+								+ entry.getValue());
+
+						if (entry.getKey().equals("pass")) {
+							pas = Integer.parseInt(entry.getValue().toString());
+						} else if (entry.getKey().equals("fail")) {
+							fail = Integer
+									.parseInt(entry.getValue().toString());
+						} else if (entry.getKey().equals("skip")) {
+							skip = Integer
+									.parseInt(entry.getValue().toString());
+						}
+
+					}
+
+					singleList.add(pas);
+					singleList.add(fail);
+					singleList.add(skip);
+
+					Map<String, Object> map = new HashMap<>();
+					map.put("Data", singleList);
+
+					ArrayList<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+					dataList.add(map);
+
+					d.setCategories(arrayList);
+					d.setData(dataList);
+
+					json = gson.toJson(d);
+					return json;
+
+				}
+			} else {
+				return null;
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			throw new IOException("Failed to fetch data for unit test", e);
+		}
+		return null;
+	}
+
+	@Override
+	public String getAggregatedDataForNightlyBuild(int buildno)
+			throws IOException {
+
+		
+		List<Map<String, Object>> data;
+		ChartData d = new ChartData();
+		Gson gson = new Gson();
+		List<String> arrayList = new ArrayList<String>();
+		arrayList.add("Pass");
+		arrayList.add("Fail");
+		arrayList.add("Skip");
+
+		int pas = 0;
+		int fail = 0;
+		int skip = 0;
+		String json;
+
+		ArrayList<Integer> singleList = new ArrayList<Integer>();
+		try {
+			data = ut.getutspecificbldno(buildno);
 			if (data.size() != 0) {
 				for (Map<String, Object> data1 : data) {
 					for (Map.Entry<String, Object> entry : data1.entrySet()) {
@@ -134,90 +209,328 @@ public class UnitDB {
 		return null;
 
 	}
-	
-	
-	public List<Map<String, Object>> getAggregatedUnitTestDataForLatestNightlyBuild() throws SQLException, ClassNotFoundException{
 
-	//	LOGGER.debug("called getAggregatedUnitTestDataForNightlyBuildId");
-		
-	//	String sql = "select sum(subut.total) total,sum(subut.pass) pass,sum(subut.fail) fail, sum(subut.skip) skip from (select modulename, datetime as dt,max(id) id from  buildinfo  subbi  where subbi.nightlybuild_id in (select id from nightlybuild where datetime in (select max(datetime) from nightlybuild where status = 1)) and project_id = " + this.projectid + " group by modulename) suborig LEFT JOIN unittest subut ON suborig.id = subut.buildinfo_id;";
-		// query to get data from so e2e snapshot
-		
-		String sql = "select * from (select max(id) id from buildinfo where project_id = " + this.projectid + " and nightlybuild_id != 'NULL') tempbi inner join unittest ut on ut.buildinfo_id = tempbi.id;";	
-		return executeQuery(sql);
+	@Override
+	public String getAggregatedDataForLatestNightlyBuild() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	public List<Map<String, Object>> executeQuery(String sql)
-			throws SQLException {
-		Connection conn = null;
-		Statement statement = null;
-		ResultSet resultSet = null;
+
+	@Override
+	public String getAllModulesAggregatedDataForLatestBuild()
+			throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAllModulesAggregatedDataForLatestNightlyBuild()
+			throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getLatestCiModulewise() throws IOException {
+		List<Map<String, Object>> data;
+		try {
+			data = ut.getAllModulesUnitTestForLatestBuild();
+		} catch (SQLException | ClassNotFoundException e) {
+			throw new IOException("Failed to fetch data for unit test", e);
+		}
+
+		return getJSONDataForColumnwise(data);
+	}
+
+	private String getJSONDataForColumnwise(List<Map<String, Object>> data)
+			throws JsonProcessingException, IOException {
+		if (null != data) {
+			Map<String, String> selectDataList = new HashMap<String, String>();
+			selectDataList.put("fail", "Fail");
+			selectDataList.put("pass", "Pass");
+			selectDataList.put("skip", "Skip");
+			return UnitHelper.getInstance().getJSONDataForChartColumnWise(data,
+					"modulename", selectDataList);
+		} else {
+			throw new IOException("Build data for specified build id not found");
+		}
+	}
+
+	@Override
+	public String getTrendWeekData() throws IOException {
+
+		ChartData d = new ChartData();
+		Gson gson = new Gson();
+
+		ObjectClass testResultPass = new ObjectClass("Pass");
+		ObjectClass testResultFail = new ObjectClass("Fail");
+		ObjectClass testResultSkip = new ObjectClass("Skip");
+		ObjectClass testResultTotal = new ObjectClass("Total");
+
+		List<ObjectClass> result = new ArrayList<ObjectClass>();
+		String json;
+
+		List<Integer> arrayList = new ArrayList<Integer>();
+
+		List<Map<String, Object>> data;
+		Map<String, Object> map1;
+		Map<String, Object> map2;
 
 		try {
-			
-			conn = getInstance().getConnection();
-			statement = conn.createStatement();
-			resultSet = statement.executeQuery(sql);
-
-			return UnitDB.getInstance().getEntitiesFromResultSet(resultSet);
+			data = ut.getWeekUtAggregateDataNightlyBuild();
+		} catch (SQLException | ClassNotFoundException e) {
+			throw new IOException("Failed to fetch data for unit test", e);
 		}
 
-		finally {
-			UnitDB.close(conn, statement, resultSet);
+		for (Map<String, Object> data1 : data) {
+			for (Map.Entry<String, Object> entry : data1.entrySet()) {
+				System.out.println(entry.getKey() + ": " + entry.getValue());
+
+				if (entry.getKey().equals("buildnumber")) {
+					arrayList.add(Integer.parseInt(entry.getValue().toString()));
+				}
+
+				else if (entry.getKey().equals("pass")) {
+					testResultPass.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+				else if (entry.getKey().equals("fail")) {
+					testResultFail.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				} else if (entry.getKey().equals("total")) {
+					testResultTotal.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+				else if (entry.getKey().equals("skip")) {
+					testResultSkip.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+			}
+
 		}
+		result.add(testResultPass);
+		result.add(testResultFail);
+		result.add(testResultTotal);
+		result.add(testResultSkip);
+		d.setCategories(arrayList);
+		d.setData(result);
+		json = gson.toJson(d);
+		return json;
 
 	}
-	
-	public static synchronized UnitDB getInstance() {
-		if (cihelper == null) {
-			cihelper = new UnitDB();
-		}
-		return cihelper;
-	}
-	
-	public Connection getConnection() throws SQLException {
-		Connection connection = null;
-		return connection = DriverManager.getConnection("jdbc:mysql://13.127.34.110/ci","root", "root");
-	}
-	
-	public static void close(Connection c, Statement s, ResultSet r) {
+
+	@Override
+	public String getTrendMonthData() throws IOException {
+		ChartData d = new ChartData();
+		Gson gson = new Gson();
+
+		ObjectClass testResultPass = new ObjectClass("Pass");
+		ObjectClass testResultFail = new ObjectClass("Fail");
+		ObjectClass testResultSkip = new ObjectClass("Skip");
+		ObjectClass testResultTotal = new ObjectClass("Total");
+
+		List<ObjectClass> result = new ArrayList<ObjectClass>();
+		String json;
+
+		List<Integer> arrayList = new ArrayList<Integer>();
+
+		List<Map<String, Object>> data;
+		Map<String, Object> map1;
+		Map<String, Object> map2;
+
 		try {
-			if(r != null){
-				r.close();
-			}
-			if(s != null){
-				s.close();
-			}
-			if (c != null) {
-				c.close();
-			}
-		} catch (Exception e) {
-			// ignore
+			data = ut.getMonthUtAggregateDataNightlyBuild();
+		} catch (SQLException | ClassNotFoundException e) {
+			throw new IOException("Failed to fetch data for unit test", e);
 		}
-	}
-	
-	
-	protected Map<String, Object> getEntityFromResultSet(ResultSet resultSet)
-			throws SQLException {
-		ResultSetMetaData metaData = resultSet.getMetaData();
-		int columnCount = metaData.getColumnCount();
-		Map<String, Object> resultsMap = new HashMap<String, Object>();
-		for (int i = 1; i <= columnCount; ++i) {
-			String columnName = metaData.getColumnName(i).toLowerCase();
-			Object object = resultSet.getObject(i);
-			resultsMap.put(columnName, object);
+
+		for (Map<String, Object> data1 : data) {
+			for (Map.Entry<String, Object> entry : data1.entrySet()) {
+				System.out.println(entry.getKey() + ": " + entry.getValue());
+
+				if (entry.getKey().equals("buildnumber")) {
+					arrayList
+							.add(Integer.parseInt(entry.getValue().toString()));
+				}
+
+				else if (entry.getKey().equals("pass")) {
+					testResultPass.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+				else if (entry.getKey().equals("fail")) {
+					testResultFail.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				} else if (entry.getKey().equals("total")) {
+					testResultTotal.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+				else if (entry.getKey().equals("skip")) {
+					testResultSkip.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+			}
+
 		}
-		return resultsMap;
-	}
-  
-	public List<Map<String, Object>> getEntitiesFromResultSet(
-			ResultSet resultSet) throws SQLException {
-		ArrayList<Map<String, Object>> entities = new ArrayList<Map<String, Object>>();
-		while (resultSet.next()) {
-			entities.add(getEntityFromResultSet(resultSet));
-		}
-		return entities;
+		result.add(testResultPass);
+		result.add(testResultFail);
+		result.add(testResultTotal);
+		result.add(testResultSkip);
+		d.setCategories(arrayList);
+		d.setData(result);
+		json = gson.toJson(d);
+		return json;
+
 	}
 
+	@Override
+	public String getTrendCustomData(String todate, String fromdate)
+			throws IOException {
+
+		ChartData d = new ChartData();
+		Gson gson = new Gson();
+
+		ObjectClass testResultPass = new ObjectClass("Pass");
+		ObjectClass testResultFail = new ObjectClass("Fail");
+		ObjectClass testResultSkip = new ObjectClass("Skip");
+		ObjectClass testResultTotal = new ObjectClass("Total");
+
+		List<ObjectClass> result = new ArrayList<ObjectClass>();
+		String json;
+
+		List<Integer> arrayList = new ArrayList<Integer>();
+
+		List<Map<String, Object>> data;
+		Map<String, Object> map1;
+		Map<String, Object> map2;
+
+		try {
+			data = ut.getTrendCustomUtData(todate, fromdate);
+		} catch (SQLException | ClassNotFoundException e) {
+			throw new IOException(
+					"Failed to fetch data for unit test for custom date range",
+					e);
+		}
+
+		for (Map<String, Object> data1 : data) {
+			for (Map.Entry<String, Object> entry : data1.entrySet()) {
+				System.out.println(entry.getKey() + ": " + entry.getValue());
+
+				if (entry.getKey().equals("buildnumber")) {
+					arrayList
+							.add(Integer.parseInt(entry.getValue().toString()));
+				}
+
+				else if (entry.getKey().equals("pass")) {
+					testResultPass.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+				else if (entry.getKey().equals("fail")) {
+					testResultFail.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				} else if (entry.getKey().equals("total")) {
+					testResultTotal.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+				else if (entry.getKey().equals("skip")) {
+					testResultSkip.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+			}
+
+		}
+		result.add(testResultPass);
+		result.add(testResultFail);
+		result.add(testResultTotal);
+		result.add(testResultSkip);
+		d.setCategories(arrayList);
+		d.setData(result);
+		json = gson.toJson(d);
+		return json;
+	}
+
+	@Override
+	public void setBuildNumber(int buildnumber) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getbuildwiseinfo(int projectid, int buildnumber)
+			throws IOException {
+		
+		
+		ChartData d = new ChartData();
+		Gson gson = new Gson();
+
+		ObjectClass testResultPass = new ObjectClass("Pass");
+		ObjectClass testResultFail = new ObjectClass("Fail");
+		ObjectClass testResultSkip = new ObjectClass("Skip");
+		ObjectClass testResultTotal = new ObjectClass("Total");
+
+		List<ObjectClass> result = new ArrayList<ObjectClass>();
+		String json;
+
+		List<Integer> arrayList = new ArrayList<Integer>();
+
+		List<Map<String, Object>> data;
+		Map<String, Object> map1;
+		Map<String, Object> map2;
+
+		try {
+			data = ut.getutspecificbldno(buildnumber);
+		} catch (SQLException | ClassNotFoundException e) {
+			throw new IOException("Failed to fetch data for unit test", e);
+		}
+
+		for (Map<String, Object> data1 : data) {
+			for (Map.Entry<String, Object> entry : data1.entrySet()) {
+				System.out.println(entry.getKey() + ": " + entry.getValue());
+
+				if (entry.getKey().equals("buildnumber")) {
+					arrayList
+							.add(Integer.parseInt(entry.getValue().toString()));
+				}
+
+				else if (entry.getKey().equals("pass")) {
+					testResultPass.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+				else if (entry.getKey().equals("fail")) {
+					testResultFail.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				} else if (entry.getKey().equals("total")) {
+					testResultTotal.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+				else if (entry.getKey().equals("skip")) {
+					testResultSkip.data.add(Integer.parseInt(entry.getValue()
+							.toString()));
+				}
+
+			}
+
+		}
+		result.add(testResultPass);
+		result.add(testResultFail);
+		result.add(testResultTotal);
+		result.add(testResultSkip);
+		d.setCategories(arrayList);
+		d.setData(result);
+		json = gson.toJson(d);
+		return json;
+	}
+
+	
 
 }
