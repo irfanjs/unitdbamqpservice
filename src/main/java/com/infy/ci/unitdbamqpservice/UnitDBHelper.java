@@ -1,8 +1,5 @@
 package com.infy.ci.unitdbamqpservice;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,14 +11,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.ResourceUtils;
 
 
 @Configuration
@@ -35,12 +29,12 @@ public class UnitDBHelper {
 	private DataSource dataSource;
 	
 	public UnitDBHelper() {
-		
+				
 		PoolProperties p = new PoolProperties();
 		//Properties prop = new Properties();
 		InputStream input = null;
-		
-		p.setUrl("jdbc:mysql://35.154.226.156/ci");
+				
+		p.setUrl("jdbc:mysql://13.127.44.82/ci");
 		p.setDriverClassName("com.mysql.jdbc.Driver");
 		
 		p.setUsername("root");
