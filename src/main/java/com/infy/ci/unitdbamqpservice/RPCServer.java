@@ -49,16 +49,34 @@ public class RPCServer {
 			String[] output = request.split("-");
 			String projectid = output[1];
 			String build = output[2];
-			String buildtype = "nightly";
+			String buildtype = output[3];
 			
 			UnitDB db = new UnitDB(Integer.parseInt(projectid));
 			
+			if (output[0].equals("aggregate"))
+			{
 			if(build.toLowerCase().equals("latest") && buildtype.equals("nightly")){
 			 response = db.getLatestNightlyaggregate();
 			}
 			else
 			{
 			 response = db.getAggregatedDataForNightlyBuild(Integer.parseInt(build));
+			}
+			}
+			else
+			{
+				if(build.toLowerCase().equals("latest") && buildtype.equals("nightly")){
+					logger.info(" in else loop" + build.toLowerCase());
+					logger.info(" in else loop" + buildtype);
+					 response = db.getLatestCiModulewise();
+					}
+					else
+					{
+						
+						logger.info(" in else loop111" + build.toLowerCase());
+						logger.info(" in else loop111" + buildtype);
+					 response = db.getAggregatedDataForNightlyBuild(Integer.parseInt(build));
+					}	
 			}
 			
 			return response;
