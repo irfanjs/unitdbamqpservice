@@ -28,7 +28,7 @@ public class RPCServer {
 	
 	private final static Logger logger = LoggerFactory.getLogger(RPCServer.class);
 
-	private static final String RPC_QUEUE_NAME = "rpc_queue1";
+	private static final String RPC_QUEUE_NAME = "rpc_queue_unit";
 
 	public RPCServer() throws IOException, TimeoutException {
 
@@ -45,10 +45,27 @@ public class RPCServer {
 		@RabbitListener(queues = RPC_QUEUE_NAME)
 		public String reply(String request) throws IOException, TimeoutException, ClassNotFoundException, SQLException {
 			logger.info("Sent Message was: " + request);
-			UnitDB db = new UnitDB(1);
-			String response = db.getLatestNightlyaggregate();
+			String response;
+			String[] output = request.split("-");
+			String projectid = output[1];
+			String build = output[2];
+			String buildtype = "nightly";
+			
+			UnitDB db = new UnitDB(Integer.parseInt(projectid));
+			
+			if(build.toLowerCase().equals("latest") && buildtype.equals("nightly")){
+			 response = db.getLatestNightlyaggregate();
+			}
+			else
+			{
+			 response = db.getAggregatedDataForNightlyBuild(Integer.parseInt(build));
+			}
+			
 			return response;
+			
 		}
+		
+		
 	}
 }
 
