@@ -34,7 +34,7 @@ public class UnitDBHelper {
 		//Properties prop = new Properties();
 		InputStream input = null;
 				
-		p.setUrl("jdbc:mysql://13.127.104.59/ci");
+		p.setUrl("jdbc:mysql://13.127.161.141/ci");
 		p.setDriverClassName("com.mysql.jdbc.Driver");
 		
 		p.setUsername("root");
