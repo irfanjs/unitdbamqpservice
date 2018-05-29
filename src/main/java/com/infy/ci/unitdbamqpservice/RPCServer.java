@@ -71,7 +71,17 @@ public class RPCServer {
 				response = db.getTrendWeekData();
 			} else if (output[0].equals("month")) {
 				response = db.getTrendMonthData();
-			} else {
+			} else if (output[0].equals("custom")) {
+				String todate = output[2];
+				String fromdate = output[3];
+				response = db.getTrendCustomData(todate, fromdate);
+			} else if (output[0].equals("projects")) {
+				response = db.getProjectNames();
+			} else if (output[0].equals("latestnightlybuilds")) {
+				response = db.getLatestNightlybuilds();
+			}
+
+			else {
 				throw new RuntimeException("failed to return a response. please check the message sent");
 			}
 			return response;

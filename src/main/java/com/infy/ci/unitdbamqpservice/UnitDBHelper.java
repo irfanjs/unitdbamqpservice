@@ -17,26 +17,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration
 public class UnitDBHelper {
-	
-	  private final Logger logger = LoggerFactory.getLogger(UnitDBHelper.class);
+
+	private final Logger logger = LoggerFactory.getLogger(UnitDBHelper.class);
 	static private UnitDBHelper cihelper;
 
 	private final static Object cihelperLock = new Object();
 
 	private DataSource dataSource;
-	
+
 	public UnitDBHelper() {
-				
+
 		PoolProperties p = new PoolProperties();
-		//Properties prop = new Properties();
+		// Properties prop = new Properties();
 		InputStream input = null;
-				
-		p.setUrl("jdbc:mysql://13.127.161.141/ci");
+
+		p.setUrl("jdbc:mysql://13.126.121.209/ci");
 		p.setDriverClassName("com.mysql.jdbc.Driver");
-		
+
 		p.setUsername("root");
 		p.setPassword("root");
 
@@ -57,14 +56,15 @@ public class UnitDBHelper {
 		p.setRemoveAbandoned(true);
 		p.setJdbcInterceptors("org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"
 				+ "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
-		
-		/*prop.setProperty("useSSL", "false");
-		prop.setProperty("autoReconnect", "true");
-		*/
+
+		/*
+		 * prop.setProperty("useSSL", "false");
+		 * prop.setProperty("autoReconnect", "true");
+		 */
 
 		dataSource = new DataSource(p);
 	}
-	
+
 	public static synchronized UnitDBHelper getInstance() {
 		if (cihelper == null) {
 			cihelper = new UnitDBHelper();
@@ -76,8 +76,7 @@ public class UnitDBHelper {
 		return dataSource.getConnection();
 	}
 
-	public List<Map<String, Object>> getEntitiesFromResultSet(
-			ResultSet resultSet) throws SQLException {
+	public List<Map<String, Object>> getEntitiesFromResultSet(ResultSet resultSet) throws SQLException {
 		ArrayList<Map<String, Object>> entities = new ArrayList<Map<String, Object>>();
 		while (resultSet.next()) {
 			entities.add(getEntityFromResultSet(resultSet));
@@ -85,8 +84,7 @@ public class UnitDBHelper {
 		return entities;
 	}
 
-	protected Map<String, Object> getEntityFromResultSet(ResultSet resultSet)
-			throws SQLException {
+	protected Map<String, Object> getEntityFromResultSet(ResultSet resultSet) throws SQLException {
 		ResultSetMetaData metaData = resultSet.getMetaData();
 		int columnCount = metaData.getColumnCount();
 		Map<String, Object> resultsMap = new HashMap<String, Object>();
@@ -98,15 +96,13 @@ public class UnitDBHelper {
 		return resultsMap;
 	}
 
-	public Statement createExecuteStatement() throws SQLException,
-			ClassNotFoundException {
-	
+	public Statement createExecuteStatement() throws SQLException, ClassNotFoundException {
+
 		Connection c = getConnection();
 		return c.createStatement();
 	}
 
-	public PreparedStatement createInsertStatement(String sqlQuery)
-			throws SQLException, ClassNotFoundException {
+	public PreparedStatement createInsertStatement(String sqlQuery) throws SQLException, ClassNotFoundException {
 		// Statements allow to issue SQL queries to the database
 		Connection c = getConnection();
 		return c.prepareStatement(sqlQuery);
@@ -114,10 +110,10 @@ public class UnitDBHelper {
 
 	public static void close(Connection c, Statement s, ResultSet r) {
 		try {
-			if(r != null){
+			if (r != null) {
 				r.close();
 			}
-			if(s != null){
+			if (s != null) {
 				s.close();
 			}
 			if (c != null) {

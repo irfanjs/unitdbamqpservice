@@ -14,12 +14,11 @@ public class UnitDB implements CIData {
 
 	UnitDBQueries ut;
 
-
 	public UnitDB(int projectid) {
 		ut = new UnitDBQueries(projectid);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public String getAggregatedDataForBuild(int buildno) throws IOException {
 		// TODO Auto-generated method stub
@@ -57,8 +56,7 @@ public class UnitDB implements CIData {
 	}
 
 	@Override
-	public String getAllModuleDataForNightlyBuild(int buildno)
-			throws IOException {
+	public String getAllModuleDataForNightlyBuild(int buildno) throws IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -103,17 +101,14 @@ public class UnitDB implements CIData {
 			if (data.size() != 0) {
 				for (Map<String, Object> data1 : data) {
 					for (Map.Entry<String, Object> entry : data1.entrySet()) {
-						System.out.println(entry.getKey() + ": "
-								+ entry.getValue());
+						System.out.println(entry.getKey() + ": " + entry.getValue());
 
 						if (entry.getKey().equals("pass")) {
 							pas = Integer.parseInt(entry.getValue().toString());
 						} else if (entry.getKey().equals("fail")) {
-							fail = Integer
-									.parseInt(entry.getValue().toString());
+							fail = Integer.parseInt(entry.getValue().toString());
 						} else if (entry.getKey().equals("skip")) {
-							skip = Integer
-									.parseInt(entry.getValue().toString());
+							skip = Integer.parseInt(entry.getValue().toString());
 						}
 
 					}
@@ -145,10 +140,8 @@ public class UnitDB implements CIData {
 	}
 
 	@Override
-	public String getAggregatedDataForNightlyBuild(int buildno)
-			throws IOException {
+	public String getAggregatedDataForNightlyBuild(int buildno) throws IOException {
 
-		
 		List<Map<String, Object>> data;
 		ChartData d = new ChartData();
 		Gson gson = new Gson();
@@ -168,17 +161,14 @@ public class UnitDB implements CIData {
 			if (data.size() != 0) {
 				for (Map<String, Object> data1 : data) {
 					for (Map.Entry<String, Object> entry : data1.entrySet()) {
-						System.out.println(entry.getKey() + ": "
-								+ entry.getValue());
+						System.out.println(entry.getKey() + ": " + entry.getValue());
 
 						if (entry.getKey().equals("pass")) {
 							pas = Integer.parseInt(entry.getValue().toString());
 						} else if (entry.getKey().equals("fail")) {
-							fail = Integer
-									.parseInt(entry.getValue().toString());
+							fail = Integer.parseInt(entry.getValue().toString());
 						} else if (entry.getKey().equals("skip")) {
-							skip = Integer
-									.parseInt(entry.getValue().toString());
+							skip = Integer.parseInt(entry.getValue().toString());
 						}
 
 					}
@@ -217,15 +207,13 @@ public class UnitDB implements CIData {
 	}
 
 	@Override
-	public String getAllModulesAggregatedDataForLatestBuild()
-			throws IOException {
+	public String getAllModulesAggregatedDataForLatestBuild() throws IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getAllModulesAggregatedDataForLatestNightlyBuild()
-			throws IOException {
+	public String getAllModulesAggregatedDataForLatestNightlyBuild() throws IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -249,8 +237,7 @@ public class UnitDB implements CIData {
 			selectDataList.put("fail", "Fail");
 			selectDataList.put("pass", "Pass");
 			selectDataList.put("skip", "Skip");
-			return UnitHelper.getInstance().getJSONDataForChartColumnWise(data,
-					"modulename", selectDataList);
+			return UnitHelper.getInstance().getJSONDataForChartColumnWise(data, "modulename", selectDataList);
 		} else {
 			throw new IOException("Build data for specified build id not found");
 		}
@@ -291,21 +278,17 @@ public class UnitDB implements CIData {
 				}
 
 				else if (entry.getKey().equals("pass")) {
-					testResultPass.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultPass.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("fail")) {
-					testResultFail.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultFail.data.add(Integer.parseInt(entry.getValue().toString()));
 				} else if (entry.getKey().equals("total")) {
-					testResultTotal.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultTotal.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("skip")) {
-					testResultSkip.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultSkip.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 			}
@@ -352,26 +335,21 @@ public class UnitDB implements CIData {
 				System.out.println(entry.getKey() + ": " + entry.getValue());
 
 				if (entry.getKey().equals("buildnumber")) {
-					arrayList
-							.add(Integer.parseInt(entry.getValue().toString()));
+					arrayList.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("pass")) {
-					testResultPass.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultPass.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("fail")) {
-					testResultFail.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultFail.data.add(Integer.parseInt(entry.getValue().toString()));
 				} else if (entry.getKey().equals("total")) {
-					testResultTotal.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultTotal.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("skip")) {
-					testResultSkip.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultSkip.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 			}
@@ -389,8 +367,7 @@ public class UnitDB implements CIData {
 	}
 
 	@Override
-	public String getTrendCustomData(String todate, String fromdate)
-			throws IOException {
+	public String getTrendCustomData(String todate, String fromdate) throws IOException {
 
 		ChartData d = new ChartData();
 		Gson gson = new Gson();
@@ -412,9 +389,7 @@ public class UnitDB implements CIData {
 		try {
 			data = ut.getTrendCustomUtData(todate, fromdate);
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new IOException(
-					"Failed to fetch data for unit test for custom date range",
-					e);
+			throw new IOException("Failed to fetch data for unit test for custom date range", e);
 		}
 
 		for (Map<String, Object> data1 : data) {
@@ -422,26 +397,21 @@ public class UnitDB implements CIData {
 				System.out.println(entry.getKey() + ": " + entry.getValue());
 
 				if (entry.getKey().equals("buildnumber")) {
-					arrayList
-							.add(Integer.parseInt(entry.getValue().toString()));
+					arrayList.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("pass")) {
-					testResultPass.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultPass.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("fail")) {
-					testResultFail.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultFail.data.add(Integer.parseInt(entry.getValue().toString()));
 				} else if (entry.getKey().equals("total")) {
-					testResultTotal.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultTotal.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("skip")) {
-					testResultSkip.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultSkip.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 			}
@@ -460,14 +430,12 @@ public class UnitDB implements CIData {
 	@Override
 	public void setBuildNumber(int buildnumber) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public String getbuildwiseinfo(int projectid, int buildnumber)
-			throws IOException {
-		
-		
+	public String getbuildwiseinfo(int projectid, int buildnumber) throws IOException {
+
 		ChartData d = new ChartData();
 		Gson gson = new Gson();
 
@@ -496,26 +464,21 @@ public class UnitDB implements CIData {
 				System.out.println(entry.getKey() + ": " + entry.getValue());
 
 				if (entry.getKey().equals("buildnumber")) {
-					arrayList
-							.add(Integer.parseInt(entry.getValue().toString()));
+					arrayList.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("pass")) {
-					testResultPass.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultPass.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("fail")) {
-					testResultFail.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultFail.data.add(Integer.parseInt(entry.getValue().toString()));
 				} else if (entry.getKey().equals("total")) {
-					testResultTotal.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultTotal.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 				else if (entry.getKey().equals("skip")) {
-					testResultSkip.data.add(Integer.parseInt(entry.getValue()
-							.toString()));
+					testResultSkip.data.add(Integer.parseInt(entry.getValue().toString()));
 				}
 
 			}
@@ -531,6 +494,93 @@ public class UnitDB implements CIData {
 		return json;
 	}
 
-	
+	@Override
+	public String getProjectNames() throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		List<Map<String, Object>> data;
+		data = ut.getProjectNamesId();
+		List<ProductDesc> result = new ArrayList<ProductDesc>();
+
+		Gson gson = new Gson();
+		String json;
+		for (Map<String, Object> data1 : data) {
+			ProductDesc p = new ProductDesc();
+			for (Map.Entry<String, Object> entry : data1.entrySet()) {
+				System.out.println(entry.getKey() + ": " + entry.getValue());
+
+				if (entry.getKey().equals("id")) {
+					p.setId(Integer.parseInt(entry.getValue().toString()));
+				}
+
+				else if (entry.getKey().equals("name")) {
+					p.setDn(entry.getValue().toString());
+				}
+			}
+			result.add(p);
+
+		}
+
+		json = gson.toJson(result);
+		return json;
+	}
+
+	@Override
+	public String getLatestNightlybuilds() throws IOException {
+
+		List<Map<String, Object>> data;
+		Gson gson = new Gson();
+		List<Object> arrayList = new ArrayList<Object>();
+
+		String json;
+
+		try {
+
+			data = ut.getBuildArtifactsForLatestNightlyBuild();
+			if (data.size() != 0) {
+				for (Map<String, Object> data1 : data) {
+					NightArtifacts na = new NightArtifacts();
+					for (Map.Entry<String, Object> entry : data1.entrySet()) {
+						System.out.println(entry.getKey() + ": " + entry.getValue());
+
+						if (entry.getKey().equals("buildnumber")) {
+							// pas =
+							// Integer.parseInt(entry.getValue().toString());
+							// na.setId(Integer.parseInt(entry.getValue().toString()));
+							na.setBuildnumber(Integer.parseInt(entry.getValue().toString()));
+						} else if (entry.getKey().equals("loc")) {
+							na.setLoc(Integer.parseInt(entry.getValue().toString()));
+						} else if (entry.getKey().equals("result")) {
+							na.setResult(entry.getValue().toString());
+						}
+
+						else if (entry.getKey().equals("reason")) {
+							na.setReason(entry.getValue().toString());
+						}
+
+						else if (entry.getKey().equals("datetime")) {
+							na.setDatetime(entry.getValue().toString());
+						}
+
+						else if (entry.getKey().equals("reviewidcount")) {
+							na.setReviewidcount(Integer.parseInt(entry.getValue().toString()));
+						}
+
+					}
+
+					arrayList.add(na);
+
+				}
+
+				json = gson.toJson(arrayList);
+				return json;
+			} else {
+				return null;
+			}
+
+		} catch (SQLException | ClassNotFoundException e) {
+			throw new IOException("Failed to fetch data for latest nightly build artifact", e);
+		}
+
+	}
 
 }
