@@ -1,5 +1,9 @@
 package com.infy.ci.unitdbamqpservice;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,10 +16,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ResourceUtils;
 
 public class UnitDBQueries {
 
@@ -69,6 +75,7 @@ public class UnitDBQueries {
 		ResultSet resultSet = null;
 
 		try {
+			
 			UnitDBHelper u = new UnitDBHelper();
 			conn = u.getInstance().getConnection();
 			statement = conn.createStatement();
@@ -82,7 +89,7 @@ public class UnitDBQueries {
 		}
 
 	}
-
+	
 	public List<Map<String, Object>> getUnitTestForBuildId(int buildnumber)
 			throws SQLException, ClassNotFoundException {
 
