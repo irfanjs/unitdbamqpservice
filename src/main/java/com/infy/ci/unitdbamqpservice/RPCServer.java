@@ -79,6 +79,12 @@ public class RPCServer {
 				response = db.getProjectNames();
 			} else if (output[0].equals("latestnightlybuilds")) {
 				response = db.getLatestNightlybuilds();
+			} else if (output[0].equals("daterange")) {
+				DateRange dr = new DateRange();
+				response = dr.getdaterange();
+			} else if (output[0].equals("buildnumber")) {
+				String buildnumber = output[2];
+				response = db.getAggregatedDataForNightlyBuild(Integer.parseInt(buildnumber));
 			}
 
 			else {
