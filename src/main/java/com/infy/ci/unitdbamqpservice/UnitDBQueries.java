@@ -19,19 +19,40 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.ResourceUtils;
 
+//@RunWith(SpringJUnit4ClassRunner.class)
+
+@Component
 public class UnitDBQueries {
 
 	int projectid;
 	int buildnumber;
+	
+	@Autowired
+	private UnitDBHelper u;
 
 	public UnitDBQueries(int projectid) {
 		this.projectid = projectid;
 
 	}
+	
+	public void setProjectid(int projectid) {
+		this.projectid = projectid;
+	}
+
+	public UnitDBQueries()
+	{
+		
+	}
+	
+	
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnitDBQueries.class);
 
@@ -41,7 +62,7 @@ public class UnitDBQueries {
 		Connection conn = null;
 		PreparedStatement prepStatement = null;
 		try {
-			conn = UnitDBHelper.getInstance().getConnection();
+			conn = u.getConnection();
 			prepStatement = conn
 					.prepareStatement("insert into unittest(buildinfo_id,total,pass,fail) values(?,?,?,?);");
 
@@ -76,12 +97,13 @@ public class UnitDBQueries {
 
 		try {
 			
-			UnitDBHelper u = new UnitDBHelper();
-			conn = u.getInstance().getConnection();
+			//UnitDBHelper u = new UnitDBHelper();
+			
+			conn = u.getConnection();
 			statement = conn.createStatement();
 			resultSet = statement.executeQuery(sql);
 
-			return UnitDBHelper.getInstance().getEntitiesFromResultSet(resultSet);
+			return u.getEntitiesFromResultSet(resultSet);
 		}
 
 		finally {
@@ -324,7 +346,7 @@ public class UnitDBQueries {
 		PreparedStatement prepStatement = null;
 
 		try {
-			conn = UnitDBHelper.getInstance().getConnection();
+			conn = u.getConnection();
 			prepStatement = conn.prepareStatement("insert into nightlybuild(datetime) values(?);");
 
 			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -345,7 +367,7 @@ public class UnitDBQueries {
 
 		String sql = "select id  from nightlybuild order by datetime desc limit 1;";
 		try {
-			conn = UnitDBHelper.getInstance().getConnection();
+			conn = u.getConnection();
 			statement = conn.createStatement();
 			resultSet = statement.executeQuery(sql);
 			if (resultSet.next()) {

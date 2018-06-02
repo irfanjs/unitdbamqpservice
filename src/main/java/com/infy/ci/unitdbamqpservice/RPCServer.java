@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,9 @@ public class RPCServer {
 
 	@Component
 	public static class RpcListener {
+		
+		@Autowired
+		UnitDB db;
 
 		@RabbitListener(queues = RPC_QUEUE_NAME)
 		public String reply(String request) throws IOException, TimeoutException, ClassNotFoundException, SQLException {
@@ -45,7 +49,8 @@ public class RPCServer {
 			String[] output = request.split("-");
 			String projectid = output[1];
 
-			UnitDB db = new UnitDB(Integer.parseInt(projectid));
+		//	UnitDB db = new UnitDB(Integer.parseInt(projectid));
+			db.setProjectid(Integer.parseInt(projectid));
 
 			if (output[0].equals("aggregate")) {
 				String build = output[2];

@@ -7,17 +7,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 
+@Component
 public class UnitDB implements CIData {
 
+	@Autowired
 	UnitDBQueries ut;
+	
+	public UnitDB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public UnitDB(int projectid) {
 		ut = new UnitDBQueries(projectid);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public void setProjectid(int projectid) {
+		
+		ut.setProjectid(projectid);
+	}
+	
+	
 
 	@Override
 	public String getAggregatedDataForBuild(int buildno) throws IOException {

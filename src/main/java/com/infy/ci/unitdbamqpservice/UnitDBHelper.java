@@ -11,19 +11,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
+
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-@Configuration
 @Component
-public class UnitDBHelper implements InitializingBean {
+@PropertySource("classpath:application.properties")
+public class UnitDBHelper {
 
 	private final Logger logger = LoggerFactory.getLogger(UnitDBHelper.class);
 	static private UnitDBHelper cihelper;
@@ -32,13 +35,59 @@ public class UnitDBHelper implements InitializingBean {
 
 	private DataSource dataSource;
 	
+	 @Value("${spring.mysql.host}")
+	    private String host;
+	
 	@Autowired
     private Environment env;
+	
+	 @PostConstruct
+	    public void fooInit(){
+	       // LOG.info("This will be printed; LOG has already been injected");
+		 
+		 PoolProperties p = new PoolProperties();
+			// Properties prop = new Properties();
 
-	/*public UnitDBHelper() {
+			InputStream input = null;
+
+			p.setUrl("jdbc:mysql://" + host + "/ci");
+			p.setDriverClassName("com.mysql.jdbc.Driver");
+
+			p.setUsername("root");
+			p.setPassword("root");
+
+			p.setJmxEnabled(true);
+			p.setTestWhileIdle(true);
+			p.setTestOnBorrow(true);
+			p.setValidationQuery("SELECT 1");
+			p.setTestOnReturn(false);
+			p.setValidationInterval(30000);
+			p.setTimeBetweenEvictionRunsMillis(30000);
+			p.setMaxActive(100);
+			p.setInitialSize(10);
+			p.setMaxWait(10000);
+			p.setRemoveAbandonedTimeout(60);
+			p.setMinEvictableIdleTimeMillis(30000);
+			p.setMinIdle(10);
+			p.setLogAbandoned(true);
+			p.setRemoveAbandoned(true);
+			p.setJdbcInterceptors("org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"
+					+ "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
+
+			/*
+			 * prop.setProperty("useSSL", "false");
+			 * prop.setProperty("autoReconnect", "true");
+			 */
+
+			dataSource = new DataSource(p);
+
+		 
+	    }
+
+	public UnitDBHelper() {
+
 		
-		
-	}*/
+	}
 
 	public static synchronized UnitDBHelper getInstance() {
 		if (cihelper == null) {
@@ -99,46 +148,4 @@ public class UnitDBHelper implements InitializingBean {
 		}
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		// TODO Auto-generated method stub
-		
-        String host = env.getProperty("spring.mysql.host");
-		
-		PoolProperties p = new PoolProperties();
-		// Properties prop = new Properties();
-		InputStream input = null;
-		
-		p.setUrl("jdbc:mysql://" + host + "/ci");
-		p.setDriverClassName("com.mysql.jdbc.Driver");
-
-		p.setUsername("root");
-		p.setPassword("root");
-
-		p.setJmxEnabled(true);
-		p.setTestWhileIdle(true);
-		p.setTestOnBorrow(true);
-		p.setValidationQuery("SELECT 1");
-		p.setTestOnReturn(false);
-		p.setValidationInterval(30000);
-		p.setTimeBetweenEvictionRunsMillis(30000);
-		p.setMaxActive(100);
-		p.setInitialSize(10);
-		p.setMaxWait(10000);
-		p.setRemoveAbandonedTimeout(60);
-		p.setMinEvictableIdleTimeMillis(30000);
-		p.setMinIdle(10);
-		p.setLogAbandoned(true);
-		p.setRemoveAbandoned(true);
-		p.setJdbcInterceptors("org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"
-				+ "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
-
-		/*
-		 * prop.setProperty("useSSL", "false");
-		 * prop.setProperty("autoReconnect", "true");
-		 */
-
-		dataSource = new DataSource(p);
-		
-	}
 }
