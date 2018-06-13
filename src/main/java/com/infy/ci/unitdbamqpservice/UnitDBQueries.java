@@ -1,9 +1,5 @@
 package com.infy.ci.unitdbamqpservice;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,25 +12,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.TimeZone;
 
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.util.ResourceUtils;
-
-//@RunWith(SpringJUnit4ClassRunner.class)
 
 @Component
 public class UnitDBQueries {
 
 	int projectid;
 	int buildnumber;
-	
+
 	@Autowired
 	private UnitDBHelper u;
 
@@ -42,17 +32,14 @@ public class UnitDBQueries {
 		this.projectid = projectid;
 
 	}
-	
+
 	public void setProjectid(int projectid) {
 		this.projectid = projectid;
 	}
 
-	public UnitDBQueries()
-	{
-		
+	public UnitDBQueries() {
+
 	}
-	
-	
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnitDBQueries.class);
 
@@ -96,9 +83,6 @@ public class UnitDBQueries {
 		ResultSet resultSet = null;
 
 		try {
-			
-			//UnitDBHelper u = new UnitDBHelper();
-			
 			conn = u.getConnection();
 			statement = conn.createStatement();
 			resultSet = statement.executeQuery(sql);
@@ -111,7 +95,7 @@ public class UnitDBQueries {
 		}
 
 	}
-	
+
 	public List<Map<String, Object>> getUnitTestForBuildId(int buildnumber)
 			throws SQLException, ClassNotFoundException {
 

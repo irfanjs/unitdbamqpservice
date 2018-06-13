@@ -34,66 +34,50 @@ public class UnitDBHelper {
 	private final static Object cihelperLock = new Object();
 
 	private DataSource dataSource;
-	
-	 @Value("${spring.mysql.host}")
-	    private String host;
-	
+
+	@Value("${spring.mysql.host}")
+	private String host;
+
 	@Autowired
-    private Environment env;
-	
-	 @PostConstruct
-	    public void fooInit(){
-	       // LOG.info("This will be printed; LOG has already been injected");
-		 
-		 PoolProperties p = new PoolProperties();
-			// Properties prop = new Properties();
+	private Environment env;
 
-			InputStream input = null;
+	@PostConstruct
+	public void fooInit() {
 
-			p.setUrl("jdbc:mysql://" + host + "/ci");
-			p.setDriverClassName("com.mysql.jdbc.Driver");
+		PoolProperties p = new PoolProperties();
 
-			p.setUsername("root");
-			p.setPassword("root");
+		InputStream input = null;
 
-			p.setJmxEnabled(true);
-			p.setTestWhileIdle(true);
-			p.setTestOnBorrow(true);
-			p.setValidationQuery("SELECT 1");
-			p.setTestOnReturn(false);
-			p.setValidationInterval(30000);
-			p.setTimeBetweenEvictionRunsMillis(30000);
-			p.setMaxActive(100);
-			p.setInitialSize(10);
-			p.setMaxWait(10000);
-			p.setRemoveAbandonedTimeout(60);
-			p.setMinEvictableIdleTimeMillis(30000);
-			p.setMinIdle(10);
-			p.setLogAbandoned(true);
-			p.setRemoveAbandoned(true);
-			p.setJdbcInterceptors("org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"
-					+ "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
+		p.setUrl("jdbc:mysql://" + host + "/ci");
+		p.setDriverClassName("com.mysql.jdbc.Driver");
 
-			/*
-			 * prop.setProperty("useSSL", "false");
-			 * prop.setProperty("autoReconnect", "true");
-			 */
+		p.setUsername("root");
+		p.setPassword("root");
 
-			dataSource = new DataSource(p);
+		p.setJmxEnabled(true);
+		p.setTestWhileIdle(true);
+		p.setTestOnBorrow(true);
+		p.setValidationQuery("SELECT 1");
+		p.setTestOnReturn(false);
+		p.setValidationInterval(30000);
+		p.setTimeBetweenEvictionRunsMillis(30000);
+		p.setMaxActive(100);
+		p.setInitialSize(10);
+		p.setMaxWait(10000);
+		p.setRemoveAbandonedTimeout(60);
+		p.setMinEvictableIdleTimeMillis(30000);
+		p.setMinIdle(10);
+		p.setLogAbandoned(true);
+		p.setRemoveAbandoned(true);
+		p.setJdbcInterceptors("org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"
+				+ "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
 
-		 
-	    }
+		dataSource = new DataSource(p);
+
+	}
 
 	public UnitDBHelper() {
 
-		
-	}
-
-	public static synchronized UnitDBHelper getInstance() {
-		if (cihelper == null) {
-			cihelper = new UnitDBHelper();
-		}
-		return cihelper;
 	}
 
 	public Connection getConnection() throws SQLException {

@@ -38,7 +38,7 @@ public class RPCServer {
 
 	@Component
 	public static class RpcListener {
-		
+
 		@Autowired
 		UnitDB db;
 
@@ -49,7 +49,6 @@ public class RPCServer {
 			String[] output = request.split("-");
 			String projectid = output[1];
 
-		//	UnitDB db = new UnitDB(Integer.parseInt(projectid));
 			db.setProjectid(Integer.parseInt(projectid));
 
 			if (output[0].equals("aggregate")) {

@@ -18,7 +18,7 @@ public class UnitDB implements CIData {
 
 	@Autowired
 	UnitDBQueries ut;
-	
+
 	public UnitDB() {
 		// TODO Auto-generated constructor stub
 	}
@@ -27,13 +27,11 @@ public class UnitDB implements CIData {
 		ut = new UnitDBQueries(projectid);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public void setProjectid(int projectid) {
-		
+
 		ut.setProjectid(projectid);
 	}
-	
-	
 
 	@Override
 	public String getAggregatedDataForBuild(int buildno) throws IOException {
