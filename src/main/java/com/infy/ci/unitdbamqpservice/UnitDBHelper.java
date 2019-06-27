@@ -44,7 +44,13 @@ public class UnitDBHelper {
 	@Value("${mysql.db}")
 	private String db;
 	
-
+	@Value("${spring.mysql.user}")
+	private String user;
+	
+	@Value("${spring.mysql.password}")
+	private String password;
+	
+	
 	@Autowired
 	private Environment env;
 
@@ -58,8 +64,8 @@ public class UnitDBHelper {
 		p.setUrl("jdbc:mysql://" + host + ":" + port + "/" + db);
 		p.setDriverClassName("com.mysql.jdbc.Driver");
 
-		p.setUsername("root");
-		p.setPassword("root");
+		p.setUsername(user);
+		p.setPassword(password);
 
 		p.setJmxEnabled(true);
 		p.setTestWhileIdle(true);
